@@ -1,0 +1,20 @@
+{
+  "name": "zgame",
+  "version": "1.0.0",
+  "description": "Game development kit for Cocos Creator 3.x, support annotations by TypeScript.",
+  "author": "speedphp",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/speedphp/zgame.git"
+  },
+  "keywords": [
+    "cocos",
+    "Cocos Creator",
+    "typescript",
+    "decorator",
+    "autoware",
+    "annotation",
+    "game"
+  ]
+}
