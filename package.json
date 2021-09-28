@@ -1,6 +1,6 @@
 {
   "name": "zgame",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Game development kit for Cocos Creator 3.x, support annotations by TypeScript.",
   "author": "speedphp",
   "license": "MIT",

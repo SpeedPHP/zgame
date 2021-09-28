@@ -104,6 +104,8 @@ The ```find ``` is the function of Cocos in [document](https://docs.cocos.com/cr
 
 And ```@model``` in some Component property:
 ```
+import { model } from "zgame";
+
 @model(UserModel)
 userModel: UserModel;
 ```
