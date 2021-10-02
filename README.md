@@ -31,14 +31,14 @@ Somewhere to emit the event:
 ```
 import { eventCenter } from "zgame";
 
-eventCenter.emit(EeventType.ButtonOnClick, {user: "zzz"});
+eventCenter.emit(EventType.ButtonOnClick, {user: "zzz"});
 ```
 
 And respond the event and get the passed data:
 ```
 import { event } from "zgame";
 
-@event(EeventType.ButtonOnClick)
+@event(EventType.ButtonOnClick)
 onButtonClick(user: UserDTO) {
     //console.log("got click action by " + user);
 }
