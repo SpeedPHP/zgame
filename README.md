@@ -14,6 +14,7 @@ Game development kit for Cocos Creator 3.x, support annotations by TypeScript.
 - By decorators, same as Java annotations.
 - Event-base MVC, support component autoware, ```@view```, ```@model```, ```@event```, and ```eventCenter```.
 - Easier websocket by Event with Socket.io, ```@ws```, ```@ConfigSocketIO```, ```@ioConnect```, and ```socket``` instance.
+- Http Request by Event as the same way with annotations， ```@http```, ```eventCenter.get()``` and ```eventCenter.post()```.
 
 ### Install
 
@@ -82,6 +83,45 @@ getMessage(msg) {
 }
 ```
 About the ```socket``` instance usage, please visit the [Socket.io document](https://socket.io/docs/v4/server-api/#socket).
+
+**Http Request with Event usage**
+
+- Use the ```eventCenter.get()``` or ```eventCenter.post()``` to send a asynchronous http request to some server.
+- Method with ```@http``` will listen to the http response.
+
+In some Component we set up the listener for receive the http response:
+
+```
+import { http } from "zgame";
+
+@http("infomationByGet")
+onInformation(...args) {
+    console.log("got a response: " + args);
+}
+
+@http("infomationByPost")
+onResult(...args) {
+    console.log("got another response: " + args);
+}
+```
+And we can send the ```get``` or ```post``` by ```eventCenter````.
+
+```
+import { eventCenter } from "zgame";
+
+// example in some start(){} we get
+start () {
+    eventCenter.get("infomationByGet", 'http://localhost:3000/index.php');
+}
+
+// or post with data, and optional response type 
+eventCenter.post("infomationByPost",
+    'http://localhost:3000/post',
+    JSON.stringify({"name":"zzz", isPlayer:true}),
+    "json" // response type, default "" for plain.
+);
+
+```
 
 **Autoware for view and model**
 
