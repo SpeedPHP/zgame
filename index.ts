@@ -2,16 +2,23 @@ import { find, Eventify } from 'cc';
 
 let socket;
 
+const serialize = function(obj) {
+    var str = [];
+    for (var p in obj)
+        if (obj.hasOwnProperty(p)) {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }
+    return str.join("&");
+}
 class EventZGame {}
 class InnerEventCenter extends Eventify(EventZGame) {
     static __http_event_prefix__: string  = '__http_event_prefix__';
-    get(eventName: string, url: string, responseType?: XMLHttpRequestResponseType): void{
+    get(eventName: string, url: string, responseType: XMLHttpRequestResponseType = ""): void{
         const that = this;
         const xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
-        if(responseType){
-            xhr.responseType = responseType;
-        }
+        xhr.responseType = responseType;
+
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState == 4) {
                 that.emit(InnerEventCenter.__http_event_prefix__ + eventName, xhr.response);
@@ -20,22 +27,42 @@ class InnerEventCenter extends Eventify(EventZGame) {
         xhr.send();
     }
 
-    post(eventName: string, url: string, body?: any, responseType?: XMLHttpRequestResponseType): void{
+    post(eventName: string, url: string, body?: FormData | string | object, responseType: XMLHttpRequestResponseType = ""): void{
         const that = this;
         const xhr = new XMLHttpRequest();
         xhr.open('POST', url, true);
-        if(responseType){
-            xhr.responseType = responseType;
-        }
+        xhr.responseType = responseType;
         if(body){
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         }
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState == 4) {
                 that.emit(InnerEventCenter.__http_event_prefix__ + eventName, xhr.response);
             }
         }
-        xhr.send(body);
+        if(body instanceof FormData || typeof body === 'string'){
+            xhr.send(body);
+        }else {
+            xhr.send(serialize(body));
+        }
+    }
+
+    json(eventName: string, url: string, json: string | object, responseType: XMLHttpRequestResponseType = "json"): void{
+        const that = this;
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.responseType = responseType;
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.onreadystatechange = function (e) {
+            if (xhr.readyState == 4) {
+                that.emit(InnerEventCenter.__http_event_prefix__ + eventName, xhr.response);
+            }
+        }
+        if(typeof json === 'string'){
+            xhr.send(json);
+        }else {
+            xhr.send(JSON.stringify(json));
+        }
     }
 }
 const eventCenter = new InnerEventCenter();
