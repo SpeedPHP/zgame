@@ -3,7 +3,34 @@ import { find, Eventify } from 'cc';
 let socket;
 
 class EventZGame {}
-class InnerEventCenter extends Eventify(EventZGame) {}
+class InnerEventCenter extends Eventify(EventZGame) {
+    static __http_event_prefix__: string  = '__http_event_prefix__';
+    get(eventName: string, url: string, responseType: XMLHttpRequestResponseType = ""): void{
+        const that = this;
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.responseType = responseType;
+        xhr.onreadystatechange = function (e) {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                that.emit(InnerEventCenter.__http_event_prefix__ + eventName, xhr.response);
+            }
+        }
+        xhr.send();
+    }
+
+    post(eventName: string, url: string, body:any, responseType: XMLHttpRequestResponseType = ""): void{
+        const that = this;
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.responseType = responseType;
+        xhr.onreadystatechange = function (e) {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                that.emit(InnerEventCenter.__http_event_prefix__ + eventName, xhr.response);
+            }
+        }
+        xhr.send(body);
+    }
+}
 const eventCenter = new InnerEventCenter();
 const modelObjectMap = new Map();
 
@@ -61,6 +88,15 @@ function ws(eventName: string) {
     }
 }
 
+// on http event
+function http(eventName: string) {
+    return function(target, propertyKey: string, descriptor: PropertyDescriptor) {
+        eventCenter.on(InnerEventCenter.__http_event_prefix__ + eventName, function (e) {
+            target[propertyKey](e);
+        });
+    }
+}
+
 // for create socket io config
 function ConfigSocketIO() : any {
     return (target: any, propertyName: string) => {
@@ -74,4 +110,4 @@ const ioConnect = function (...args) {
     return io.connect(...args);
 }
 
-export { ConfigSocketIO, view, model, ws, socket, event, eventCenter, ioConnect};
+export { ConfigSocketIO, view, model, ws, http, socket, event, eventCenter, ioConnect};
