@@ -11,7 +11,7 @@ class InnerEventCenter extends Eventify(EventZGame) {
         xhr.open('GET', url, true);
         xhr.responseType = responseType;
         xhr.onreadystatechange = function (e) {
-            if (xhr.readyState == 4 && xhr.status == 200) {
+            if (xhr.readyState == 4) {
                 that.emit(InnerEventCenter.__http_event_prefix__ + eventName, xhr.response);
             }
         }
@@ -24,7 +24,7 @@ class InnerEventCenter extends Eventify(EventZGame) {
         xhr.open('POST', url, true);
         xhr.responseType = responseType;
         xhr.onreadystatechange = function (e) {
-            if (xhr.readyState == 4 && xhr.status == 200) {
+            if (xhr.readyState == 4) {
                 that.emit(InnerEventCenter.__http_event_prefix__ + eventName, xhr.response);
             }
         }
