@@ -5,11 +5,13 @@ let socket;
 class EventZGame {}
 class InnerEventCenter extends Eventify(EventZGame) {
     static __http_event_prefix__: string  = '__http_event_prefix__';
-    get(eventName: string, url: string, responseType: XMLHttpRequestResponseType = ""): void{
+    get(eventName: string, url: string, responseType?: XMLHttpRequestResponseType): void{
         const that = this;
         const xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
-        xhr.responseType = responseType;
+        if(responseType){
+            xhr.responseType = responseType;
+        }
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState == 4) {
                 that.emit(InnerEventCenter.__http_event_prefix__ + eventName, xhr.response);
@@ -18,11 +20,16 @@ class InnerEventCenter extends Eventify(EventZGame) {
         xhr.send();
     }
 
-    post(eventName: string, url: string, body:any, responseType: XMLHttpRequestResponseType = ""): void{
+    post(eventName: string, url: string, body?: any, responseType?: XMLHttpRequestResponseType): void{
         const that = this;
         const xhr = new XMLHttpRequest();
         xhr.open('POST', url, true);
-        xhr.responseType = responseType;
+        if(responseType){
+            xhr.responseType = responseType;
+        }
+        if(body){
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        }
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState == 4) {
                 that.emit(InnerEventCenter.__http_event_prefix__ + eventName, xhr.response);
