@@ -14,7 +14,7 @@ Game development kit for Cocos Creator 3.x, support annotations by TypeScript.
 - By decorators, same as Java annotations.
 - Event-base MVC, support component autoware, ```@view```, ```@model```, ```@event```, and ```eventCenter```.
 - Easier websocket by Event with Socket.io, ```@ws```, ```@ConfigSocketIO```, ```@ioConnect```, and ```socket``` instance.
-- Http Request by Event as the same way with annotations， ```@http```, ```eventCenter.get()``` and ```eventCenter.post()```.
+- Http Request by Event as the same way with annotations， ```@http```, ```eventCenter.get()```, ```eventCenter.post()``` and ```eventCenter.json()```.
 
 ### Install
 
@@ -86,7 +86,7 @@ About the ```socket``` instance usage, please visit the [Socket.io document](htt
 
 **Http Request with Event usage**
 
-- Use the ```eventCenter.get()``` or ```eventCenter.post()``` to send a asynchronous http request to some server.
+- Use the ```eventCenter.get()``` or ```eventCenter.post()``` or ```eventCenter.json()``` to send a asynchronous http request to some server.
 - Method with ```@http``` will listen to the http response.
 
 In some Component we set up the listener for receive the http response:
@@ -104,7 +104,7 @@ onResult(...args) {
     console.log("got another response: " + args);
 }
 ```
-And we can send the ```get``` or ```post``` by ```eventCenter````.
+And we can send the ```get```, ```post``` or ```json``` by ```eventCenter````.
 
 ```
 import { eventCenter } from "zgame";
@@ -117,8 +117,12 @@ start () {
 // or post with data, and optional response type 
 eventCenter.post("infomationByPost",
     'http://localhost:3000/post',
-    JSON.stringify({"name":"zzz", isPlayer:true}),
-    "json" // response type, default "" for plain.
+    {"name":"zzz", isPlayer:true} // will be Params in request
+);
+
+eventCenter.post("infomationByPost",
+    'http://localhost:3000/post',
+    {"name":"zzz", isPlayer:true} // will be Body in request
 );
 
 ```
@@ -140,7 +144,7 @@ It is equivalent to:
 ```
 const theSpriteSplash: Node = find('Main Camera/Canvas/SpriteSplash');
 ```           
-The ```find ``` is the function of Cocos in [document](https://docs.cocos.com/creator/3.3/manual/zh/scripting/access-node-component.html#%E5%85%A8%E5%B1%80%E5%90%8D%E5%AD%97%E6%9F%A5%E6%89%BE).
+The ```find``` is the function of Cocos in [document](https://docs.cocos.com/creator/3.3/manual/zh/scripting/access-node-component.html#%E5%85%A8%E5%B1%80%E5%90%8D%E5%AD%97%E6%9F%A5%E6%89%BE).
 
 And ```@model``` in some Component property:
 ```
