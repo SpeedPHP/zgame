@@ -120,7 +120,7 @@ eventCenter.post("infomationByPost",
     {"name":"zzz", isPlayer:true} // will be Params in request
 );
 
-eventCenter.post("infomationByPost",
+eventCenter.json("infomationByPost",
     'http://localhost:3000/post',
     {"name":"zzz", isPlayer:true} // will be Body in request
 );
